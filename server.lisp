@@ -1,8 +1,9 @@
 (defpackage :server
   (:use :common-lisp :cl-ppcre :hunchentoot)
   (:export :restart-acceptor
-           :vhost
-           :dispatch-table))
+           :vhost1
+           :dispatch-table
+           :add-routes))
 
 (in-package :server)
 
@@ -42,7 +43,6 @@
 
 ;;; Start VHOST
 (defun restart-acceptor ()
-  (if (hunchentoot::acceptor-shutdown-p vhost1)
-      (hunchentoot:start vhost1)
-      (progn (hunchentoot:stop vhost1)
-             (hunchentoot:start vhost1))))
+  (unless (hunchentoot::acceptor-shutdown-p vhost1)
+    (hunchentoot:stop vhost1))
+  (hunchentoot:start vhost1))
