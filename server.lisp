@@ -37,9 +37,7 @@
 ;;; Populate the dispatch table
 (defun add-routes (route-function-list)
   (loop for route in route-function-list
-     do (push
-         route
-         (dispatch-table vhost1))))
+     do (push route (dispatch-table vhost1))))
 
 ;;; Start VHOST
 (defun restart-acceptor ()
