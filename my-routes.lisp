@@ -1,9 +1,5 @@
 (in-package #:my-routes)
 
-;;; clear previously defined routes so we do not have to restart the server all
-;;; the time
-(setf (server:dispatch-table server:vhost1) '())
-
 ;;; list of functions for adding to the dispatch-table
 (server:add-routes
  (list (hunchentoot:create-prefix-dispatcher "/foo" 'my-routes::foo1)

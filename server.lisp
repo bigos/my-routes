@@ -36,6 +36,9 @@
 
 ;;; Populate the dispatch table
 (defun add-routes (route-function-list)
+  ;; clear previously defined routes so we do not have to restart the server
+  (setf (dispatch-table vhost1) '())
+  ;; add route functions
   (loop for route in route-function-list
      do (push route (dispatch-table vhost1))))
 
