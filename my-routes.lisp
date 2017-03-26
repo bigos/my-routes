@@ -41,7 +41,13 @@
 
 ;;; Define handlers
 (defun foo1 () "Hello everyone")
-(defun bar () "Weeeeeeeeeee!!!")
+(defun bar () "Weeeeeeeeeee yay!!!")
+
+(defun restart-acceptor (a)
+  (if (hunchentoot::acceptor-shutdown-p a)
+      (hunchentoot:start a)
+      (progn (hunchentoot:stop a)
+             (hunchentoot:start a))))
 
 ;;; Start VHOSTs
-(hunchentoot:start vhost1)
+(restart-acceptor vhost1)
