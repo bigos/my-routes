@@ -30,20 +30,19 @@
         (dispatch-table vhost))
   (call-next-method))
 
-;;; Instantiate VHOSTs
-(defvar vhost (make-instance 'vhost :port 5000))
+;;; Instantiate VHOST
+(defvar vhost1 (make-instance 'vhost :port 5000))
 
-(defun restart-acceptor ()
-  (if (hunchentoot::acceptor-shutdown-p vhost)
-      (hunchentoot:start vhost)
-      (progn (hunchentoot:stop vhost)
-             (hunchentoot:start vhost))))
-
-(defun add-routes (route-list)
-  (loop for route in route-list
+;;; Populate the dispatch table
+(defun add-routes (route-function-list)
+  (loop for route in route-function-list
      do (push
          route
-         (dispatch-table vhost))))
+         (dispatch-table vhost1))))
 
-(defun list-routes ()
-  (dispatch-table vhost))
+;;; Start VHOST
+(defun restart-acceptor ()
+  (if (hunchentoot::acceptor-shutdown-p vhost1)
+      (hunchentoot:start vhost1)
+      (progn (hunchentoot:stop vhost1)
+             (hunchentoot:start vhost1))))
