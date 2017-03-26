@@ -9,5 +9,5 @@
                #:parenscript)
   :serial t
   :components ((:file "package")
+               (:file "server")
                (:file "my-routes")))
-
