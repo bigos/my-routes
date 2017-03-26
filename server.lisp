@@ -1,8 +1,6 @@
 (defpackage :server
   (:use :common-lisp :cl-ppcre :hunchentoot)
   (:export :restart-acceptor
-           :vhost1
-           :dispatch-table
            :add-routes))
 
 (in-package :server)
