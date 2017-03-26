@@ -33,11 +33,15 @@
 
 ;;; Populate each dispatch table
 (push
- (tbnl:create-prefix-dispatcher "/foo" 'foo1)
+ (hunchentoot:create-prefix-dispatcher "/foo" 'foo1)
+ (dispatch-table vhost1))
+(push
+ (hunchentoot:create-prefix-dispatcher "/bar" 'bar)
  (dispatch-table vhost1))
 
 ;;; Define handlers
 (defun foo1 () "Hello everyone")
+(defun bar () "Weeeeeeeeeee!!!")
 
 ;;; Start VHOSTs
 (hunchentoot:start vhost1)
