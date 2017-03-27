@@ -9,7 +9,7 @@
 ;; http://weitz.de/hunchentoot/#subclassing-acceptors
 
 ;;; Subclass ACCEPTOR
-(defclass vhost (hunchentoot:acceptor)
+(defclass vhost (acceptor)
   ;; slots
   ((dispatch-table
     :initform '()
@@ -20,7 +20,7 @@
    :address "127.0.0.1"))              ; because ACCEPTOR uses it
 
 ;;; Specialise ACCEPTOR-DISPATCH-REQUEST for VHOSTs
-(defmethod hunchentoot:acceptor-dispatch-request ((vhost vhost) request)
+(defmethod acceptor-dispatch-request ((vhost vhost) request)
   ;; try REQUEST on each dispatcher in turn
   (mapc (lambda (dispatcher)
           (let ((handler (funcall dispatcher request)))
@@ -43,5 +43,5 @@
 ;;; Start VHOST
 (defun restart-acceptor ()
   (unless (hunchentoot::acceptor-shutdown-p vhost1)
-    (hunchentoot:stop vhost1))
-  (hunchentoot:start vhost1))
+    (stop vhost1))
+  (start vhost1))

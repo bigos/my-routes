@@ -10,4 +10,5 @@
   :serial t
   :components ((:file "package")
                (:file "server")
+               (:file "handlers")
                (:file "my-routes")))
