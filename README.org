@@ -1,0 +1,29 @@
+* Experiment with adding Rails style parameters to Hunchentoot.
+
+** Installation
+
+After cloning the repo run the following in your REPL.
+
+#+BEGIN_EXAMPLE
+(push #p"/home/user/Programming/Lisp/my-routes/" asdf:*central-registry*)
+
+(ql:quickload :my-routes)
+(in-package :my-routes)
+#+END_EXAMPLE
+
+Then open browser and visit: http://localhost:5000/baz/alice/has/cat.
+Routes are defined in my-routes.lisp. To achieve expected behaviour experiment
+with defining your own routes creating something like:
+#+BEGIN_EXAMPLE
+/controller/:action/:id
+#+END_EXAMPLE
+
+Extracted params are passed as arguments to the handler function.
+
+
+** Similar project
+
+I was looking for an alternative to
+https://github.com/vancan1ty/simple-routes
+and was trying to create a simpler solution and understand Hunchentoot
+request dispatching .
