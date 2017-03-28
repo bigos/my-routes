@@ -44,7 +44,7 @@ regex parts."
   (let ((parts (mapcar
                 (lambda (c)
                   (if (starts-with-colon c)
-                      "\\w*"            ; replace keyword with regex part
+                      "\\w+"            ; replace keyword with regex part
                       c))
                 (split-by-slash str))))
     (with-output-to-string (s)          ; build regex
