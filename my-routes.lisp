@@ -10,7 +10,7 @@
   (let ((chunks (cdr (split-by-slash str))))
     (with-output-to-string (s)
       (loop for p in (mapcar
-                      (lambda (c) (if (equal (subseq c 0 1) ":") "\w*" c))
+                      (lambda (c) (if (equal (subseq c 0 1) ":") "\\w*" c))
                       chunks)
          do (format s "~a/~A" "\\"  p)))))
 
