@@ -27,6 +27,7 @@
 ;;; helpers for extracting parameters from url
 
 (defun split-by-slash (string)
+  "Splits STRING on slashes."
   (cdr                                  ; urls start with slash
    (loop for i = 0 then (1+ j)
       as j = (position #\/ string :start i)
@@ -34,22 +35,31 @@
       while j)))
 
 (defun starts-with-colon (str)
-  (equal (subseq str 0 1) ":"))
+  "Checks if the STRing starts with a colon."
+  (unless (zerop (length str) )
+    (equal (subseq str 0 1) ":")))
 
 (defun build-regex (str)
+  "Builds a regular expression splitting STR on / and replacing :keywords."
   (let ((chunks (split-by-slash str)))
     (with-output-to-string (s)
       (loop for p in (mapcar
-                      (lambda (c) (if (starts-with-colon c) "\\w*" c))
+                      (lambda (c) (if (starts-with-colon c) "\\w*" c))  ; replace keyword with regex
                       chunks)
          do (format s "~a/~A" "\\"  p)))))
 
 (defun build-args (regex-builder url)
+  "Builds params alist based on REGEX-BUILDER and URL."
   (loop
-     for r in (split-by-slash regex-builder)
-     for u in (split-by-slash url)
-     when (starts-with-colon r)
-     collect  u))
+     with params = nil
+     for key in (split-by-slash regex-builder)
+     for val in (split-by-slash url)
+     as arg = (starts-with-colon key)
+     do
+       (when arg
+         (setf params (acons key val params))) ; associate params
+     finally
+       (return (reverse params))))      ; we reverse for readability
 ;;; ----------------------------------------------------------------------------
 
 ;;; Specialise ACCEPTOR-DISPATCH-REQUEST for VHOSTs
@@ -59,14 +69,14 @@
           (let ((handler-cons (funcall dispatcher request)))
             (when (car handler-cons) ; Handler found. FUNCALL it and return result
               (return-from tbnl:acceptor-dispatch-request (apply (car handler-cons)
-                                                                   (cdr handler-cons))))))
+                                                                 (cdr handler-cons))))))
         (dispatch-table vhost))
   (call-next-method))
 
 (defun create-custom-dispatcher (regex-builder handler)
   "Creates a request dispatch function which will dispatch to the
 function denoted by HANDLER if the file name of the current request
-matches the CL-PPCRE regular expression REGEX."
+matches the CL-PPCRE regular expression based on REGEX-BUILDER."
   (let* ((regex (build-regex regex-builder))
          (scanner (create-scanner regex)))
     (lambda (request)
