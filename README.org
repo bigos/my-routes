@@ -11,7 +11,7 @@ After cloning the repo run the following in your REPL.
 (in-package :my-routes)
 #+END_EXAMPLE
 
-Then open browser and visit: http://localhost:5000/baz/alice/has/cat.
+Then open browser and visit: http://localhost:5000/baz/alice/has/cat .
 Routes are defined in my-routes.lisp. To achieve expected behaviour experiment
 with defining your own routes creating something like:
 #+BEGIN_EXAMPLE
