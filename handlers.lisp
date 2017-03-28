@@ -4,6 +4,6 @@
 (in-package :handlers)
 
 ;;; Define handlers
-(defun foo1 () "Hello everyone")
-(defun bar  () "Weeeeeeeeeee yay!!!")
-(defun baz  () "Baaaz")
+(defun foo1 (&rest args) "Hello everyone")
+(defun bar  (&rest args) (format nil "Weeeeeeeeeee yay!!! ~A" args))
+(defun baz  (&rest args) (format nil "Baaaz ~A" args))
