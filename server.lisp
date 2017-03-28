@@ -1,6 +1,7 @@
 (defpackage :server
   (:use :common-lisp :cl-ppcre :hunchentoot)
   (:export :restart-acceptor
+           :create-custom-dispatcher
            :add-routes))
 
 (in-package :server)
@@ -31,6 +32,19 @@
 
 ;;; Instantiate VHOST
 (defvar vhost1 (make-instance 'vhost :port 5000))
+
+(defun create-custom-dispatcher (prefix handler)
+  "Creates a request dispatch function which will dispatch to the
+function denoted by HANDLER if the file name of the current request
+starts with the string PREFIX."
+  (lambda (request)
+    (let ((mismatch (mismatch (script-name request) prefix
+                              :test #'char=)))
+      (and (or (null mismatch)
+               (>= mismatch (length prefix)))
+           handler))))
+
+;;; the lambda from above becomes the route below
 
 ;;; Populate the dispatch table
 (defun add-routes (route-function-list)
