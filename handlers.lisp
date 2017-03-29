@@ -10,4 +10,7 @@
 (defun baz  (&rest args)
   ;; this is the way of invoking a debugger
   ;; (cerror "debugging session" "tried ~a" args)
-  (format nil "Baaaz ~A ~a" (request-method (car args)) (cdr args)))
+  (format nil "Baz ~a ~a <br>get parameters ~a"
+          (request-method *request*)
+          args
+          (get-parameters *request*)))

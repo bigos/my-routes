@@ -58,8 +58,8 @@ regex parts."
       (loop for p in parts
          do (format s "\\/~A" p)))))
 
-(defun build-args (regex-builder url)
-  "Builds params alist based on REGEX-BUILDER and URL."
+(defun match-args (regex-builder url)
+  "Builds params alist based on matching REGEX-BUILDER and URL."
   (loop
      with params = nil
      for key in (split-by-slash regex-builder)
@@ -77,8 +77,8 @@ regex parts."
   (mapc (lambda (dispatcher) ; as defined in the function create-custom-dispatcher
           (let ((handler-cons (funcall dispatcher request)))
             (when (car handler-cons) ; Handler found. FUNCALL it and return result
-              (return-from tbnl:acceptor-dispatch-request (apply (car handler-cons)
-                                                                 (cdr handler-cons))))))
+              (return-from acceptor-dispatch-request (apply (car handler-cons)
+                                                            (cdr handler-cons))))))
         (dispatch-table vhost))
   (call-next-method))
 
@@ -93,9 +93,8 @@ current request matches the CL-PPCRE regular expression based on REGEX-BUILDER."
        (or (equal http-verb :ALL)      ; we pass :all if we don't care
            (equal http-verb (request-method request)))
        (scan scanner (script-name request)) ; regex matching
-       (cons handler  ; handler cons used in acceptor-dispatch-request
-             (cons request
-                   (build-args regex-builder (script-name request))))))))
+       (cons handler ; handler cons used in acceptor-dispatch-request
+             (match-args regex-builder (script-name request)))))))
 
 ;;; the lambda from above becomes the route below
 
