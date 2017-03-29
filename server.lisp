@@ -9,6 +9,13 @@
 ;; Loosely based on the example from:
 ;; http://weitz.de/hunchentoot/#subclassing-acceptors
 
+;;; need to add development or production profiles
+(when T
+  (setf
+   *catch-errors-p* nil                 ; nil jumps to debugger on errors
+   *show-lisp-errors-p* T
+   *show-lisp-backtraces-p* T))
+
 ;;; Subclass ACCEPTOR
 (defclass vhost (acceptor)
   ;; slots
@@ -84,7 +91,8 @@ matches the CL-PPCRE regular expression based on REGEX-BUILDER."
     (lambda (request)
       (and (scan scanner (script-name request))
            (cons handler                ; cons used in acceptor-dispatch-request
-                 (build-args regex-builder (script-name request)))))))
+                 (cons request
+                       (build-args regex-builder (script-name request))))))))
 
 ;;; the lambda from above becomes the route below
 

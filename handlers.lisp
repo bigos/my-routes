@@ -8,4 +8,6 @@
 (defun bar  (&rest args)
   (format nil "Weeeeeeeeeee yay!!! ~A" args))
 (defun baz  (&rest args)
-  (format nil "Baaaz ~A" args))
+  ;; this is the way of invoking a debugger
+  ;; (cerror "debugging session" "tried ~a" args)
+  (format nil "Baaaz ~A ~a" (request-method (car args)) (cdr args)))
