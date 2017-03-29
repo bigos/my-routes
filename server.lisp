@@ -16,6 +16,10 @@
    *show-lisp-errors-p* T
    *show-lisp-backtraces-p* T))
 
+;;; ---------- DEBUGGING REQUESTS ----------
+;;; when *catch-errors-p* is nil you can do something like the following
+;;; (cerror "debugging request" "tried argument ~a" 'some-argument)
+
 ;;; Subclass ACCEPTOR
 (defclass vhost (acceptor)
   ;; slots
