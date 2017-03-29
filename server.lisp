@@ -82,17 +82,20 @@ regex parts."
         (dispatch-table vhost))
   (call-next-method))
 
-(defun create-custom-dispatcher (regex-builder handler)
-  "Creates a request dispatch function which will dispatch to the
-function denoted by HANDLER if the file name of the current request
-matches the CL-PPCRE regular expression based on REGEX-BUILDER."
+(defun create-custom-dispatcher (http-verb regex-builder handler)
+  "Creates a request dispatch function which will dispatch to the function
+denoted by HANDLER if the HTTP-VERB is correct and if the file name of  the
+current request matches the CL-PPCRE regular expression based on REGEX-BUILDER."
   (let* ((regex (build-regex regex-builder))
          (scanner (create-scanner regex)))
     (lambda (request)
-      (and (scan scanner (script-name request))
-           (cons handler                ; cons used in acceptor-dispatch-request
-                 (cons request
-                       (build-args regex-builder (script-name request))))))))
+      (and
+       (or (equal http-verb :ALL)       ; we pass :all if we don't care
+           (equal http-verb (request-method request)))
+       (scan scanner (script-name request)) ; regex matching
+       (cons handler          ; handler cons used in acceptor-dispatch-request
+             (cons request
+                   (build-args regex-builder (script-name request))))))))
 
 ;;; the lambda from above becomes the route below
 
