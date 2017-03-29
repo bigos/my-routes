@@ -12,7 +12,7 @@
 ;;; need to add development or production profiles
 (when T
   (setf
-   *catch-errors-p* nil                 ; nil jumps to debugger on errors
+   *catch-errors-p* nil              ; nil jumps to debugger on errors
    *show-lisp-errors-p* T
    *show-lisp-backtraces-p* T))
 
@@ -51,7 +51,7 @@ regex parts."
   (let ((parts (mapcar
                 (lambda (c)
                   (if (starts-with-colon c)
-                      "\\w+"            ; replace keyword with regex part
+                      "\\w+"         ; replace keyword with regex part
                       c))
                 (split-by-slash str))))
     (with-output-to-string (s)          ; build regex
@@ -90,10 +90,10 @@ current request matches the CL-PPCRE regular expression based on REGEX-BUILDER."
          (scanner (create-scanner regex)))
     (lambda (request)
       (and
-       (or (equal http-verb :ALL)       ; we pass :all if we don't care
+       (or (equal http-verb :ALL)      ; we pass :all if we don't care
            (equal http-verb (request-method request)))
        (scan scanner (script-name request)) ; regex matching
-       (cons handler          ; handler cons used in acceptor-dispatch-request
+       (cons handler  ; handler cons used in acceptor-dispatch-request
              (cons request
                    (build-args regex-builder (script-name request))))))))
 
